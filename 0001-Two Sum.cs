@@ -30,5 +30,69 @@ Constraints:
 -109 <= nums[i] <= 109
 -109 <= target <= 109
 Only one valid answer exists.
-
 */
+
+// Brute force
+/*
+Time complexity : O(n^2)O(n2). 
+For each element, we try to find its complement by looping through the rest of array which takes O(n)O(n) time. 
+Therefore, the time complexity is O(n^2)O(n2).
+Space complexity : O(1)O(1).
+*/
+public int[] TwoSum(int[] nums, int target) {
+	for(int i=0;i<nums.Length;i++)
+	{
+		for(int j=i+1;j<nums.Length;j++)
+		{
+			if(nums[i]+nums[j]==target)
+				return new int[]{i,j};
+		}
+	}
+	return new int[0];
+	
+}
+
+// Two pass hash
+/*
+Time complexity : O(n)O(n). We traverse the list containing nn elements exactly twice. 
+Since the hash table reduces the look up time to O(1)O(1), the time complexity is O(n)O(n).
+
+Space complexity : O(n)O(n). The extra space required depends on the number of items stored in the hash table, 
+which stores exactly nn elements.
+*/
+
+public int[] TwoSum(int[] nums, int target) {
+	int[] result=new int[2];
+	Dictionary<int,int> hashmap=new Dictionary<int,int>();
+	for(int i=0;i<nums.Length;i++)
+	{
+		hashmap[nums[i]]=i;
+	}
+	for(int i=0;i<nums.Length;i++)
+	{
+		int restOfSum=target-nums[i];
+		if(hashmap.ContainsKey(restOfSum) && hashmap[restOfSum]!=i)
+		{
+			result[0]=hashmap[restOfSum];
+			result[1]=i;
+			break;
+		}
+	}
+	return result;
+	
+}
+
+// One hash pass
+public int[] TwoSum(int[] nums, int target) {
+	Dictionary<int,int> hashMap=new Dictionary<int,int>();
+	for(int i=0;i<nums.Length;i++)
+	{
+		int restOfSum=target-nums[i];
+		if(hashMap.ContainsKey(restOfSum))
+		{
+			return new int[]{hashMap[restOfSum],i};
+		}
+		hashMap[nums[i]]=i;
+	}
+	return new int[0];
+}
